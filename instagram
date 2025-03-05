@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InstaHash Pro - Hashtag Generator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: #f8f9fa;
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, #e1306c, #c13584);
+            border-radius: 10px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .input-section {
+            margin-bottom: 2rem;
+        }
+
+        select {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e1306c;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background: #e1306c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #c13584;
+        }
+
+        .hashtag-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .hashtag-card {
+            background: #fff;
+            padding: 1rem;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .hashtag-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            color: #666;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>InstaHash Pro</h1>
+            <p>Generate Perfect Instagram Hashtags in One Click</p>
+        </div>
+
+        <div class="input-section">
+            <select id="nicheSelect">
+                <option value="">Select Your Niche</option>
+                <option value="fitness">🏋️ Fitness</option>
+                <option value="travel">✈️ Travel</option>
+                <option value="food">🍔 Food</option>
+                <option value="fashion">👗 Fashion</option>
+                <option value="photography">📸 Photography</option>
+                <option value="beauty">💄 Beauty</option>
+                <option value="tech">💻 Technology</option>
+                <option value="parenting">👶 Parenting</option>
+                <option value="pets">🐾 Pets</option>
+                <option value="music">🎵 Music</option>
+                <option value="art">🎨 Art</option>
+                <option value="business">💼 Business</option>
+                <option value="sports">⚽ Sports</option>
+                <option value="gaming">🎮 Gaming</option>
+                <option value="diy">🛠️ DIY</option>
+                <option value="finance">💰 Finance</option>
+                <option value="cars">🚗 Cars</option>
+                <option value="books">📚 Books</option>
+                <option value="health">🏥 Health</option>
+                <option value="education">🎓 Education</option>
+            </select>
+            <button onclick="generateHashtags()">Generate Hashtags</button>
+        </div>
+
+        <div id="hashtagsOutput" class="hashtag-container"></div>
+
+        <div class="footer">
+            <p>© 2023 InstaHash Pro | Boost Your Instagram Engagement</p>
+            <p>Click any hashtag to copy it to clipboard</p>
+        </div>
+    </div>
+
+    <script>
+        const hashtagDatabase = {
+            fitness: ['#FitFam', '#GymLife', '#WorkoutMotivation', '#FitnessGoals', '#HealthyLiving', 
+                     '#StrengthTraining', '#CardioTime', '#FitBody', '#NoExcuses', '#TrainHard'],
+            travel: ['#Wanderlust', '#TravelGoals', '#ExploreMore', '#AdventureAwaits', '#PassportReady',
+                    '#TravelDiaries', '#WorldTraveler', '#TravelAddict', '#DiscoverEarth', '#JourneyOn'],
+            food: ['#FoodieLife', '#YummyInMyTummy', '#FoodPorn', '#InstaFood', '#FoodGasm',
+                  '#HomeCooking', '#FoodBlogger', '#DeliciousDishes', '#FoodArt', '#CulinaryCreations'],
+            fashion: ['#OOTD', '#Fashionista', '#StyleInspo', '#TrendAlert', '#StreetStyle',
+                     '#FashionBlogger', '#LookOfTheDay', '#WardrobeEssentials', '#FashionForward', '#ChicStyle'],
+            photography: ['#ShutterBug', '#PhotoOfTheDay', '#CaptureMoment', '#LensCulture', '#VisualArt',
+                         '#PhotographyLife', '#ShotOniPhone', '#InstaPhoto', '#PicturePerfect', '#FrameWorthy'],
+            beauty: ['#MakeupAddict', '#GlowUp', '#SkincareRoutine', '#BeautyHacks', '#HairGoals',
+                    '#CosmeticLover', '#NaturalBeauty', '#SelfCareSunday', '#BeautyInfluencer', '#MakeupArtistry'],
+            tech: ['#TechNews', '#GadgetLover', '#FutureTech', '#AIRevolution', '#SmartHome',
+                  '#CyberSecurity', '#CodingLife', '#TechInnovation', '#DigitalTransformation', '#TechWorld'],
+            parenting: ['#MomLife', '#DadJokes', '#ParentingWin', '#ToddlerLife', '#FamilyFirst',
+                       '#RaisingKids', '#ParentingTips', '#ChildDevelopment', '#FamilyTime', '#Parenthood'],
+            pets: ['#DoggoLovers', '#CatsofInstagram', '#PetLife', '#FurryFriends', '#AnimalLove',
+                  '#PetPhotography', '#AdoptDontShop', '#PetCare', '#CutePets', '#PetParents'],
+            music: ['#MusicIsLife', '#Songwriting', '#LiveMusic', '#MusicProduction', '#VinylCollection',
+                   '#MusicDiscovery', '#ConcertVibes', '#SpotifyFinds', '#MusicStudio', '#BandLife'],
+            art: ['#ArtisticExpression', '#DigitalArt', '#WatercolorWorld', '#ArtCollector', '#GalleryWall',
+                 '#ContemporaryArt', '#ArtDaily', '#CreativeProcess', '#ArtStudio', '#ArtisticVision'],
+            business: ['#EntrepreneurLife', '#StartupGrind', '#BusinessGrowth', '#LeadershipGoals', '#CareerDevelopment',
+                      '#NetworkingTips', '#BusinessStrategy', '#SuccessMindset', '#WorkSmart', '#BusinessOwner'],
+            sports: ['#SportsLife', '#GameDay', '#FitnessMotivation', '#TeamSpirit', '#AthleteLife',
+                    '#SportsPhotography', '#TrainingHard', '#ChampionsMindset', '#SportsNews', '#HealthyCompetition'],
+            gaming: ['#GamingCommunity', '#Esports', '#StreamerLife', '#GameDev', '#Cosplay',
+                    '#GamingSetup', '#RetroGaming', '#VRGaming', '#GameReview', '#GamingMemes'],
+            diy: ['#DIYCrafts', '#HomeRenovation', '#HandmadeWithLove', '#UpcycleProject', '#CraftyIdeas',
+                 '#Woodworking', '#DIYHome', '#CreativeProjects', '#CraftTime', '#MakerMovement'],
+            finance: ['#FinancialFreedom', '#InvestingTips', '#StockMarket', '#MoneyManagement', '#WealthBuilding',
+                     '#PersonalFinance', '#FIREMovement', '#Budgeting101', '#SmartInvesting', '#DebtFree'],
+            cars: ['#CarLovers', '#Supercars', '#ClassicCars', '#CarModification', '#RacingLife',
+                  '#CarPhotography', '#AutoNews', '#LuxuryCars', '#CarMaintenance', '#DrivingPassion'],
+            books: ['#BookLover', '#ReadingList', '#BookRecommendations', '#Bookstagram', '#LiteraryQuotes',
+                   '#AuthorLife', '#BookClub', '#CurrentlyReading', '#BookNerd', '#WritingCommunity'],
+            health: ['#MentalHealthMatters', '#WellnessJourney', '#HealthyHabits', '#SelfCareMatters', '#HolisticHealth',
+                    '#FitnessNutrition', '#MindBodySoul', '#HealthyRecipes', '#WellnessTips', '#PreventiveCare'],
+            education: ['#OnlineLearning', '#StudyTips', '#EdTech', '#LifelongLearning', '#StudentLife',
+                       '#TeacherResources', '#STEMEducation', '#AcademicSuccess', '#EducationReform', '#LearningJourney']
+        };
+
+        function generateHashtags() {
+            const niche = document.getElementById('nicheSelect').value;
+            const output = document.getElementById('hashtagsOutput');
+            
+            if (!niche) {
+                alert('Please select a niche first!');
+                return;
+            }
+
+            const hashtags = hashtagDatabase[niche];
+            output.innerHTML = hashtags.map(hashtag => `
+                <div class="hashtag-card" onclick="copyHashtag('${hashtag}')">
+                    ${hashtag}
+                </div>
+            `).join('');
+        }
+
+        function copyHashtag(hashtag) {
+            navigator.clipboard.writeText(hashtag);
+            alert(`Copied: ${hashtag}`);
+        }
+    </script>
+</body>
+</html>
